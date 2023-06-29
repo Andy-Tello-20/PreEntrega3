@@ -5,6 +5,7 @@ let interesInp = document.getElementById("interes")
 let salidasInp = document.getElementById("salidas")
 let btnCalcular = document.getElementById("calcular")
 let cuadroResp = document.getElementsByClassName("resp")[0]
+let formulario1 = document.getElementsByClassName("formulario")[0]
 
 
 /* clase constructura */
@@ -103,6 +104,11 @@ btnCalcular.addEventListener("click", (event) => {
 
 
     registrar(valorVentas, valorInt, valorSalidas)
+
+    //Reseteo formulario
+    formulario1.reset()
+
+
 })
 
 /*------------------------------------------------------------------------------------ */
@@ -113,7 +119,7 @@ btnCalcular.addEventListener("click", (event) => {
 let buscarPorId = document.getElementById("inpBuscarID")
 let btnBuscarId = document.getElementById("btnBuscarID")
 let cuadroResp2 = document.getElementsByClassName("resp2")[0]
-
+let formulario2 = document.getElementsByClassName("formulario2")[0]
 
 
 
@@ -153,5 +159,8 @@ btnBuscarId.addEventListener("click", (event) => {
     let valorBusquedaId = parseInt(buscarPorId.value)
 
     buscar(valorBusquedaId, listaRegistros)
+
+    // reseteo formulario2
+    formulario2.reset()
 
 })
