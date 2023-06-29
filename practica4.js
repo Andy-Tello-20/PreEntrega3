@@ -38,17 +38,17 @@ class moldeRegistro {
 function registrar(x, y, z) {
 
     let listaRegistros
-    let contador 
+    let contador
 
     if (localStorage.getItem("registros")) {   //SI EXISTE PASA LO SIG.
 
         listaRegistros = JSON.parse(localStorage.getItem("registros"))
 
-        let long= listaRegistros.length
+        let long = listaRegistros.length
 
-        let ultimoID= listaRegistros[long-1].id
+        let ultimoID = listaRegistros[long - 1].id
 
-        contador=ultimoID
+        contador = ultimoID
 
         console.log(long)
 
@@ -103,4 +103,55 @@ btnCalcular.addEventListener("click", (event) => {
 
 
     registrar(valorVentas, valorInt, valorSalidas)
+})
+
+/*------------------------------------------------------------------------------------ */
+
+
+/*CAPTURAR FORMULARIO BUSCAR X ID  */
+
+let buscarPorId = document.getElementById("inpBuscarID")
+let btnBuscarId = document.getElementById("btnBuscarID")
+let cuadroResp2 = document.getElementsByClassName("resp2")[0]
+
+
+
+
+function buscar(x, y) {
+
+    if (y !== null) {
+
+        if (listaRegistros.length > 0) {
+
+            let pedirId = x
+
+            let buscador = listaRegistros.find(
+                (i) => i.id === pedirId
+
+            )
+
+            if (buscador) {
+
+                cuadroResp2.innerText = `Id: ${buscador.id}, Ventas: $${buscador.ventas}, Interes: $${buscador.interes}, Ganancia: $${buscador.ganancia}, Salidas: $${buscador.salidas}\nFecha de ingreso ${buscador.dia}/${buscador.mes}/${buscador.año} -- ${buscador.hora}:${buscador.minutos}:${buscador.segundos}`
+
+            } else {
+                cuadroResp2.innerText = "El registro no existe"
+            }
+
+        }
+    } else {
+        cuadroResp2.innerText = "El registro esta vacio"
+    }
+}
+
+
+btnBuscarId.addEventListener("click", (event) => {
+
+    event.preventDefault()
+
+    listaRegistros = JSON.parse(localStorage.getItem("registros"))
+    let valorBusquedaId = parseInt(buscarPorId.value)
+
+    buscar(valorBusquedaId, listaRegistros)
+
 })
