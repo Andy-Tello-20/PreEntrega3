@@ -7,3 +7,11 @@
     font-family: monospace;
     
 }
+
+.resp3{
+    display: flex;
+    width: 400px;
+    background-color: burlywood;
+    font-size: 19px;
+    font-family: monospace;
+}

@@ -164,3 +164,92 @@ btnBuscarId.addEventListener("click", (event) => {
     formulario2.reset()
 
 })
+
+/*------------------------------------------------------------------------------------ */
+
+/*CAPTURAR FORMULARIO 3 */
+
+let buscarRangomin = document.getElementById("buscarRangomin")
+let buscarRangoMax = document.getElementById("buscarRangoMax")
+let btnBuscarRango = document.getElementById("btnBuscarRango")
+let cuadroResp3 = document.getElementsByClassName("resp3")[0]
+let formulario3 = document.getElementsByClassName("formulario3")[0]
+
+
+
+
+function buscarPorVentas(x,y,z) {
+
+
+    if (z !== null) {
+        if (listaRegistros.length > 0) {
+
+            let minimo, maximo
+
+            minimo = x
+            maximo = y
+
+
+            let rango = listaRegistros.filter(
+                (i) => i.ventas >= minimo && i.ventas <= maximo
+            )
+
+            //copio el array rango con el nombre"copiaRango" y lo ordeno de menor a mayor segun el valor de las ventas 
+
+            let copiaRango = rango.slice().sort((a, b) => a.ventas - b.ventas)
+
+            // La longitud de la nueva lista "rango" segun los elementos "ventas" encontrados por el metodo FILTER. Y esta tiene que ser mayor a 0
+
+            let cantidadEncontrada = `Se encontraron ${rango.length} Registros\n\n`
+
+            //Se crea una nueva lista "resultado" y se la transforma concatenando texto + elementos de la misma lista
+            let resultados = copiaRango.map(
+                (i) => `Id: ${i.id}, Ventas: $${i.ventas}, Interés: $${i.interes}, Ganancia: $${i.ganancia}, Salidas: $${i.salidas}`
+            )
+
+            let mensaje = resultados.join("\n\n")
+
+
+
+            let reduceVentas = rango.reduce((acumulador, i) => {
+                return acumulador + i.ventas
+            }, 0)
+
+            let reduceGanancias = rango.reduce((acumulador, i) => {
+                return acumulador + i.ganancia
+            }, 0)
+
+            let reduceInteres = rango.reduce((acumulador, i) => {
+                return acumulador + i.interes
+            }, 0)
+
+            let reduceSalidas = rango.reduce((acumulador, i) => {
+                return acumulador + i.salidas
+            }, 0)
+
+            let promedioInteres = reduceInteres / rango.length
+
+            let contabilidadParcial = `\n\n🟡🟡Ventas-Parciales: 💲${reduceVentas}, Promedio-Interes: ${promedioInteres.toFixed(2)}% , Ganancias-parciales: 💲${reduceGanancias}, Salidas-parciales: 💲${reduceSalidas}🟡🟡`
+
+            cuadroResp3.innerText=`${cantidadEncontrada}${mensaje}${contabilidadParcial}`
+
+        } 
+    } else {
+        cuadroResp3.innerText = "El registro esta vacio"
+    }
+}
+
+
+btnBuscarRango.addEventListener("click",(event) => {
+
+    event.preventDefault()
+
+    listaRegistros = JSON.parse(localStorage.getItem("registros"))
+
+    let valorInpRangomin = parseInt(buscarRangomin.value)
+    let valorInpRangoMax = parseInt(buscarRangoMax.value)
+
+    buscarPorVentas(valorInpRangomin,valorInpRangoMax,listaRegistros)
+
+    formulario3.reset()
+})
