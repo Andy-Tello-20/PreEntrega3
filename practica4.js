@@ -178,7 +178,7 @@ let formulario3 = document.getElementsByClassName("formulario3")[0]
 
 
 
-function buscarPorVentas(x,y,z) {
+function buscarPorVentas(x, y, z) {
 
 
     if (z !== null) {
@@ -231,16 +231,16 @@ function buscarPorVentas(x,y,z) {
 
             let contabilidadParcial = `\n\n🟡🟡Ventas-Parciales: 💲${reduceVentas}, Promedio-Interes: ${promedioInteres.toFixed(2)}% , Ganancias-parciales: 💲${reduceGanancias}, Salidas-parciales: 💲${reduceSalidas}🟡🟡`
 
-            cuadroResp3.innerText=`${cantidadEncontrada}${mensaje}${contabilidadParcial}`
+            cuadroResp3.innerText = `${cantidadEncontrada}${mensaje}${contabilidadParcial}`
 
-        } 
+        }
     } else {
         cuadroResp3.innerText = "El registro esta vacio"
     }
 }
 
 
-btnBuscarRango.addEventListener("click",(event) => {
+btnBuscarRango.addEventListener("click", (event) => {
 
     event.preventDefault()
 
@@ -249,7 +249,48 @@ btnBuscarRango.addEventListener("click",(event) => {
     let valorInpRangomin = parseInt(buscarRangomin.value)
     let valorInpRangoMax = parseInt(buscarRangoMax.value)
 
-    buscarPorVentas(valorInpRangomin,valorInpRangoMax,listaRegistros)
+    buscarPorVentas(valorInpRangomin, valorInpRangoMax, listaRegistros)
 
     formulario3.reset()
 })
+
+
+
+
+/*------------------------------------------------------------------------------------ */
+
+/*CAPTURAR FORMULARIO 4 */
+
+let cuadroResp4 = document.getElementsByClassName("resp4")[0]
+let btnRegistroCompleto= document.getElementById("btnRegistroCompleto")
+
+function registroCompleto(x) {
+
+    if (x !== null) {
+
+        if (x.length > 0) {
+
+            let iterarTodo = listaRegistros.map(
+                (i) => `ID: ${i.id}, Ventas: $${i.ventas}, Interes: $${i.interes}, Ganancia: $${i.ganancia}, Salidas: $${i.salidas}\nFecha de ingreso ${i.dia}/${i.mes}/${i.año} -- ${i.hora}:${i.minutos}:${i.segundos}`
+            )
+
+            let verTodo = iterarTodo.join("\n\n")
+
+            cuadroResp4.innerText = `${verTodo}`
+
+        }
+    } else {
+        cuadroResp4.innerText = "El registro esta vacio"
+    }
+}
+
+btnRegistroCompleto.addEventListener("click",(event) => {
+
+    event.preventDefault()
+
+    listaRegistros = JSON.parse(localStorage.getItem("registros"))
+
+    registroCompleto(listaRegistros)
+
+})
+
