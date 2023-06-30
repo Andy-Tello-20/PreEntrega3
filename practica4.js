@@ -33,12 +33,12 @@ class moldeRegistro {
 
 
 
-
+let listaRegistros = []
 
 
 function registrar(x, y, z) {
 
-    let listaRegistros
+
     let contador
 
     if (localStorage.getItem("registros")) {   //SI EXISTE PASA LO SIG.
@@ -262,7 +262,7 @@ btnBuscarRango.addEventListener("click", (event) => {
 /*CAPTURAR FORMULARIO 4 */
 
 let cuadroResp4 = document.getElementsByClassName("resp4")[0]
-let btnRegistroCompleto= document.getElementById("btnRegistroCompleto")
+let btnRegistroCompleto = document.getElementById("btnRegistroCompleto")
 
 function registroCompleto(x) {
 
@@ -270,7 +270,7 @@ function registroCompleto(x) {
 
         if (x.length > 0) {
 
-            let iterarTodo = listaRegistros.map(
+            let iterarTodo = x.map(
                 (i) => `ID: ${i.id}, Ventas: $${i.ventas}, Interes: $${i.interes}, Ganancia: $${i.ganancia}, Salidas: $${i.salidas}\nFecha de ingreso ${i.dia}/${i.mes}/${i.año} -- ${i.hora}:${i.minutos}:${i.segundos}`
             )
 
@@ -284,7 +284,7 @@ function registroCompleto(x) {
     }
 }
 
-btnRegistroCompleto.addEventListener("click",(event) => {
+btnRegistroCompleto.addEventListener("click", (event) => {
 
     event.preventDefault()
 
@@ -294,3 +294,152 @@ btnRegistroCompleto.addEventListener("click",(event) => {
 
 })
 
+
+/*-------------------------------------------------------------------------------------------------------------- */
+
+/* CAPTURANDO FORMULARIO 5 */
+
+let formulario5 = document.getElementsByClassName("formulario5")[0]
+let btnResumen = document.getElementById("verResumen")
+let cuadroResp5 = document.getElementsByClassName("resp5")[0]
+
+
+
+
+function resumenContabilidad(x) {
+
+    if (x !== null) {
+
+        if (listaRegistros.length > 0) {
+
+            let rango = listaRegistros.filter(
+                (i) => i.ventas > 0 && i.ventas <= Infinity
+            )
+
+            /*let contTotal = listaRegistros.map(
+                (i) => `Id: ${i.id}, Ventas: $${i.ventas}, Interés: $${i.interes}, Ganancia: $${i.ganancia}, Salidas: $${i.salidas}`
+            )
+ 
+            let mensaje = contTotal.join("\n\n")*/
+
+            let reduceVentas = rango.reduce((acumulador, i) => {
+                return acumulador + i.ventas
+            }, 0)
+
+            let reduceGanancias = rango.reduce((acumulador, i) => {
+                return acumulador + i.ganancia
+            }, 0)
+
+            let reduceInteres = rango.reduce((acumulador, i) => {
+                return acumulador + i.interes
+            }, 0)
+
+            let reduceSalidas = rango.reduce((acumulador, i) => {
+                return acumulador + i.salidas
+            }, 0)
+
+
+            let promedioInteres = reduceInteres / rango.length
+
+            let contabilidadTotal = `\n\n🟢🟡Ventas-Totales:💲 ${reduceVentas}, Promedio-Interes: ${promedioInteres.toFixed(2)}% , Ganancias-Totales:💲 ${reduceGanancias.toFixed(2)}, Salidas-Totales:💲 ${reduceSalidas} 🟢🟡`
+
+            let resumen
+
+            if (reduceGanancias == reduceSalidas) {
+                resumen = "Estás obteniendo un equilibrio entre los ingresos generados y los gastos incurridos en tu negocio"
+            } else if (reduceGanancias < reduceSalidas) {
+                resumen = "Estás incurriendo en pérdidas, tu negocio no está generando suficientes ingresos para cubrir los costos o gastos"
+            } else {
+                let porcentajeRentabilidad = ((reduceGanancias - reduceSalidas) / reduceSalidas) * 100
+
+                resumen = `Estás obteniendo un rendimiento positivo del ${porcentajeRentabilidad.toFixed(2)}% en tu negocio, lo cual es deseable y demuestra que tu actividad comercial es rentable.`
+            }
+
+            cuadroResp5.innerText = `${contabilidadTotal}\n\n${resumen}`
+
+        }
+    } else {
+        alert("El registro esta vacio")
+    }
+}
+
+
+btnResumen.addEventListener("click", (event) => {
+    event.preventDefault()
+
+    listaRegistros = JSON.parse(localStorage.getItem("registros"))
+
+    resumenContabilidad(listaRegistros)
+
+})
+
+
+/*-------------------------------------------------------------------------------------------------------------- */
+
+/* CAPTURANDO FORMULARIO 6 */
+
+let formulario6 = document.getElementsByClassName("formulario6")[0]
+let inpBorrarId = document.getElementById("idABorrar")
+let btnBorrarRegistro = document.getElementById("borrarRegistro")
+let cuadroResp6 = document.getElementsByClassName("resp6")[0]
+
+
+function borrarRegistro(x, y) {
+
+    if (x !== null) {
+
+        if (x.length > 0) {
+
+            
+            //obtengo el objeto.ID
+            let obtenerId = x.find(
+                (i) => i.id == y
+            )
+
+            if (obtenerId) {
+                function confirmar() {
+
+                    let confirmarBorrado = confirm(`está seguro de borrar el registro Id: ${obtenerId.id}, Ventas: $${obtenerId.ventas}, Interes: $${obtenerId.interes}, Ganancias: $${obtenerId.ganancia}, Salidas: $${obtenerId.salidas} `)
+
+                    if (confirmarBorrado) {
+
+                        //Busco indice en la listaRegistros a traves del ID
+
+                        let indice = x.indexOf(obtenerId)
+
+                        //Borro registro en "listaRegistro" segun indice 
+
+                        x.splice(indice, 1)
+
+                        localStorage.setItem("registros", JSON.stringify(x))
+
+                        cuadroResp6.innerText=`El registro con ID: ${obtenerId.id}, ha sido eliminado`
+
+                    } else {
+                        cuadroResp6.innerText="Operacion cancelada"
+                    }
+
+                }
+                confirmar()
+
+            } else {
+                cuadroResp6.innerText="El ID ingresado no existe"
+            }
+        }
+
+    } else {
+        cuadroResp6.innerText="El registro esta vacio"
+    }
+}
+
+btnBorrarRegistro.addEventListener("click", (event) => {
+    event.preventDefault()
+
+    listaRegistros = JSON.parse(localStorage.getItem("registros"))
+
+    let valorInpBorrar = parseInt(inpBorrarId.value)
+
+    borrarRegistro(listaRegistros, valorInpBorrar)
+
+    formulario6.reset()
+})

@@ -8,10 +8,9 @@
     
 }
 
-.resp3,.resp4{
+.resp3,.resp4,.resp5,.resp6{
     display: flex;
     width: 400px;
-    height: 100px;
     background-color: burlywood;
     font-size: 19px;
     font-family: monospace;
