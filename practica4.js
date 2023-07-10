@@ -51,7 +51,7 @@ function registrar(x, y, z) {
 
         contador = ultimoID
 
-        console.log(long)
+        //console.log(long) Longitud de "listaRegistros en LocalStorage"
 
 
     } else {
